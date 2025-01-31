@@ -34,7 +34,7 @@ node {
             // -------------------------------------------------------------------------
 
             stage('Authorize DevHub') {
-                rc = command "${toolbelt}/sf org login jwt --client-id ${SF_CONSUMER_KEY} --jwt-key-file ${server_key_file} --username ${SF_USERNAME} --instance-url ${SF_INSTANCE_URL} --alias my-org --set-default"
+                rc = sh returnStatus: true, script: "${toolbelt}/sf org login jwt --client-id ${SF_CONSUMER_KEY} --jwt-key-file ${server_key_file} --username ${SF_USERNAME} --instance-url ${SF_INSTANCE_URL} --alias my-org --set-default"
                 if (rc != 0) {
                     error 'Salesforce dev hub org authorization failed.'
                 }
@@ -45,20 +45,12 @@ node {
             // -------------------------------------------------------------------------
 
             stage('Deploying Code to Org') {
-                rc = command "${toolbelt}/sf project deploy start --manifest manifest/package.xml --target-org ${SF_USERNAME}"
+                rc = sh returnStatus: true, script: "${toolbelt}/sf project deploy start --manifest manifest/package.xml --target-org ${SF_USERNAME}"
                 if (rc != 0) {
                     error 'Salesforce org deployment failed.'
                 }
             }
        }
-    }
-}
-
-def command(script) {
-    if (isUnix()) {
-        return sh(returnStatus: true, script: script);
-    } else {
-        return bat(returnStatus: true, script: script);
     }
 }
 
