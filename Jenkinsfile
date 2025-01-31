@@ -34,7 +34,7 @@ node {
             // -------------------------------------------------------------------------
 
             stage('Authorize DevHub') {
-                rc = command "${toolbelt}/sfdx force:auth:jwt:grant --client-id ${SF_CONSUMER_KEY} --jwt-key-file ${server_key_file} --username ${SF_USERNAME} --instance-url ${SF_INSTANCE_URL} --set-default-dev-hub"
+                rc = command "${toolbelt}/sf org login jwt --client-id ${SF_CONSUMER_KEY} --jwt-key-file ${server_key_file} --username ${SF_USERNAME} --instance-url ${SF_INSTANCE_URL} --alias my-org --set-default"
                 if (rc != 0) {
                     error 'Salesforce dev hub org authorization failed.'
                 }
